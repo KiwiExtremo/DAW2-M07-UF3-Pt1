@@ -24,7 +24,9 @@ public class DbConnection {
 		if (urlResource != null) {
 			try (InputStream resourceAsStream = urlResource.openStream()) {
 				props.load(resourceAsStream);
+
 				Class.forName(props.getProperty("DB_DRIVER_CLASS"));
+
 				return DriverManager.getConnection(props.getProperty("DB_URL"), props.getProperty("DB_USERNAME"),
 						props.getProperty("DB_PASSWORD"));
 			}

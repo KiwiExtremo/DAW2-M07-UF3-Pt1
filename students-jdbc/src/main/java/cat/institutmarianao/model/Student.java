@@ -66,7 +66,11 @@ public class Student {
 	}
 
 	public String getCycle() {
-		return cycle;
+		if (modules.isEmpty()) {
+			return null;
+		}
+
+		return modules.get(0).getCycleCode();
 	}
 
 	public void setCycle(String cycle) {
