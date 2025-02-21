@@ -42,20 +42,82 @@ public class StudentDaoImpl extends BaseDaoImpl<Student, Object> implements cat.
 
 	@Override
 	public Student add(Student student) throws ClassNotFoundException, SQLException, IOException {
-		// TODO
-		return null;
+		String studentQuery = "INSERT INTO students (dni, name, surname, email) " + "VALUES (?, ?, ?, ?)";
+		String moduleStudentQuery = "INSERT INTO modules_students (module_code, module_cycle_code, student_dni "
+				+ "VALUES (?, ?, ?)";
+
+		try {
+			if (connection == null) {
+				connection = dBConnection.getConnection();
+			}
+
+			connection.setAutoCommit(false);
+
+			PreparedStatement studentStmt = getPreparedStatement(studentQuery);
+			studentStmt.setString(1, student.getDni());
+			studentStmt.setString(2, student.getName());
+			studentStmt.setString(3, student.getSurname());
+			studentStmt.setString(4, student.getEmail());
+
+			executeUpdateQuery(studentStmt);
+
+			PreparedStatement moduleStmt = getPreparedStatement(moduleStudentQuery);
+
+			for (Module module : student.getModules()) {
+				moduleStmt.setString(1, module.getCode());
+				moduleStmt.setString(2, module.getCycleCode());
+				moduleStmt.setString(3, student.getDni());
+
+				moduleStmt.addBatch();
+			}
+
+			moduleStmt.executeBatch();
+
+			connection.commit();
+
+		} catch (SQLException e) {
+			connection.rollback();
+
+		} finally {
+			connection.setAutoCommit(true);
+		}
+
+		return findByPk(student.getDni());
 	}
 
 	@Override
 	public void remove(Student student) throws ClassNotFoundException, SQLException, IOException {
-		// TODO
-
+		removeByDni(student.getDni());
 	}
 
 	@Override
 	public void removeByDni(String dni) throws ClassNotFoundException, SQLException, IOException {
-		// TODO
+		String studentQuery = "DELETE FROM students WHERE dni = ?";
+		String moduleStudentQuery = "DELETE FROM modules_students WHERE student_dni = ?";
 
+		try {
+			if (connection == null) {
+				connection = dBConnection.getConnection();
+			}
+
+			connection.setAutoCommit(false);
+
+			PreparedStatement studentStmt = getPreparedStatement(studentQuery);
+			studentStmt.setString(1, dni);
+
+			executeUpdateQuery(studentStmt);
+
+			PreparedStatement moduleStmt = getPreparedStatement(moduleStudentQuery);
+			moduleStmt.setString(1, dni);
+
+			executeUpdateQuery(moduleStmt);
+
+		} catch (SQLException e) {
+			connection.rollback();
+
+		} finally {
+			connection.setAutoCommit(true);
+		}
 	}
 
 	@Override
