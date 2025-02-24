@@ -112,7 +112,7 @@ public class StudentDaoImpl extends BaseDaoImpl<Student, Object> implements cat.
 
 			executeUpdateQuery(moduleStmt);
 
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			connection.rollback();
 
 		} finally {
@@ -136,9 +136,10 @@ public class StudentDaoImpl extends BaseDaoImpl<Student, Object> implements cat.
 			} else {
 				students.get(student.getDni()).getModules().addAll(student.getModules());
 			}
-
-			results.add(student);
 		}
+
+		results.addAll(students.values());
+
 		rs.close();
 		return results;
 	}
@@ -160,6 +161,8 @@ public class StudentDaoImpl extends BaseDaoImpl<Student, Object> implements cat.
 		List<Module> modules = new ArrayList<>();
 
 		modules.add(module);
+
+		student.setCycle(rs.getString("cycle_code"));
 		student.setModules(modules);
 
 		return student;

@@ -41,20 +41,38 @@ public class StudentDaoImplTest {
 
 	@Test
 	public void testFindByPk() throws ClassNotFoundException, SQLException, IOException {
-		Student student = studentDao.findByPk("48164276E");
+		final String DNI = "27182818B";
+		Student student = studentDao.findByPk(DNI);
 
 		assertNotNull(student);
-		assertEquals("48164276E", student.getDni());
+		assertEquals(DNI, student.getDni());
 	}
 
 	@Test
-	public void testAddOk() throws ClassNotFoundException, SQLException, IOException {
+	public void testFindAll() throws ClassNotFoundException, SQLException, IOException {
+		List<Student> students = studentDao.findAll();
+
+		assertNotNull(students);
+		assertEquals(2, students.size());
+	}
+
+	@Test
+	public void testAddAndRemoveOk() throws ClassNotFoundException, SQLException, IOException {
+		// Test add student
+		final String DNI = "48164276E";
 		Student student = createArielStudent();
 
 		student = studentDao.add(student);
 
 		assertNotNull(student);
-		assertEquals("48164276E", student.getDni());
+		assertEquals(DNI, student.getDni());
+
+		// Test remove student
+		studentDao.remove(student);
+
+		student = studentDao.findByPk(DNI);
+
+		assertNull(student);
 	}
 
 	@Test
@@ -63,19 +81,18 @@ public class StudentDaoImplTest {
 	}
 
 	@Test
-	public void testRemove() throws ClassNotFoundException, SQLException, IOException {
-		Student student = studentDao.findByPk("27182818B");
-
-		studentDao.remove(student);
-
-		assertNull(studentDao.findByPk("27182818B"));
-	}
-
-	@Test
 	public void testRemoveByDniOk() throws ClassNotFoundException, SQLException, IOException {
-		studentDao.removeByDni("31415926A");
+		final String DNI = "31415926A";
+		Student student = studentDao.findByPk(DNI);
 
-		assertNull(studentDao.findByPk("31415926A"));
+		assertNotNull(student);
+		assertEquals(DNI, student.getDni());
+
+		studentDao.removeByDni(DNI);
+
+		student = studentDao.findByPk(DNI);
+
+		assertNull(student);
 	}
 
 	@Test
