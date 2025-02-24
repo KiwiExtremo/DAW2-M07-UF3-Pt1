@@ -16,7 +16,7 @@ public class ModuleDaoImpl extends BaseDaoImpl<Module, Object> implements Module
 	@Override
 	public Module findByPk(String moduleCode, String cycleCode)
 			throws ClassNotFoundException, SQLException, IOException {
-		String query = "SELECT m.code AS 'module code', m.cycle_code AS 'cycle code', m.name AS 'module name' FROM modules m JOIN cycles c "
+		String query = "SELECT m.code AS module_code, m.cycle_code AS cycle_code, m.name AS module_name FROM modules m JOIN cycles c "
 				+ "ON m.cycle_code = c.code WHERE m.code = ? AND m.cycle_code = ?";
 
 		PreparedStatement stmt = getPreparedStatement(query);
@@ -29,7 +29,7 @@ public class ModuleDaoImpl extends BaseDaoImpl<Module, Object> implements Module
 
 	@Override
 	public List<Module> findAllByCycleCode(String cycleCode) throws ClassNotFoundException, SQLException, IOException {
-		String query = "SELECT code AS 'module code', cycle_code AS 'cycle code', name AS 'module name' FROM modules WHERE cycle_code = ?";
+		String query = "SELECT code AS module_code, cycle_code AS cycle_code, name AS module_name FROM modules WHERE cycle_code = ?";
 
 		PreparedStatement stmt = getPreparedStatement(query);
 
@@ -42,9 +42,9 @@ public class ModuleDaoImpl extends BaseDaoImpl<Module, Object> implements Module
 	protected Module buildObjectFromResultSet(ResultSet rs) throws SQLException {
 		Module module = new Module();
 
-		module.setCode(rs.getString("module code"));
-		module.setCycleCode(rs.getString("cycle code"));
-		module.setName(rs.getString("module name"));
+		module.setCode(rs.getString("module_code"));
+		module.setCycleCode(rs.getString("cycle_code"));
+		module.setName(rs.getString("module_name"));
 
 		return module;
 	}

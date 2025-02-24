@@ -18,7 +18,7 @@ public class StudentDaoImpl extends BaseDaoImpl<Student, Object> implements cat.
 
 	@Override
 	public Student findByPk(String dni) throws ClassNotFoundException, SQLException, IOException {
-		String query = "SELECT dni AS 'DNI', s.name AS 'student name', surname AS 'student surname', email, module_cycle_code AS 'cycle code', m.code AS 'module code', m.name AS 'module name' "
+		String query = "SELECT dni AS DNI, s.name AS student_name, surname AS student_surname, email, module_cycle_code AS cycle_code, m.code AS module_code, m.name AS module_name "
 				+ "FROM students s JOIN modules_students ms " + "ON dni = student_dni JOIN modules m "
 				+ "ON module_code = m.code AND module_cycle_code = cycle_code " + "WHERE dni = ?";
 
@@ -31,7 +31,7 @@ public class StudentDaoImpl extends BaseDaoImpl<Student, Object> implements cat.
 
 	@Override
 	public List<Student> findAll() throws ClassNotFoundException, SQLException, IOException {
-		String query = "SELECT dni AS 'DNI', s.name AS 'student name', surname AS 'student surname', email, module_cycle_code AS 'cycle code', m.code AS 'module code', m.name AS 'module name' "
+		String query = "SELECT dni AS DNI, s.name AS student_name, surname AS student_surname, email, module_cycle_code AS cycle_code, m.code AS module_code, m.name AS module_name "
 				+ "FROM students s JOIN modules_students ms " + "ON dni = student_dni JOIN modules m "
 				+ "ON module_code = m.code AND module_cycle_code = cycle_code";
 
@@ -148,14 +148,14 @@ public class StudentDaoImpl extends BaseDaoImpl<Student, Object> implements cat.
 		Student student = new Student();
 
 		student.setDni(rs.getString("DNI"));
-		student.setName(rs.getString("student name"));
-		student.setSurname(rs.getString("student surname"));
+		student.setName(rs.getString("student_name"));
+		student.setSurname(rs.getString("student_surname"));
 		student.setEmail(rs.getString("email"));
 
 		Module module = new Module();
-		module.setCode(rs.getString("module code"));
-		module.setCycleCode(rs.getString("cycle code"));
-		module.setName(rs.getString("module name"));
+		module.setCode(rs.getString("module_code"));
+		module.setCycleCode(rs.getString("cycle_code"));
+		module.setName(rs.getString("module_name"));
 
 		List<Module> modules = new ArrayList<>();
 
