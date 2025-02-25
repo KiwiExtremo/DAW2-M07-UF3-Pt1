@@ -92,8 +92,8 @@ public class StudentDaoImpl extends BaseDaoImpl<Student, Object> implements cat.
 
 	@Override
 	public void removeByDni(String dni) throws ClassNotFoundException, SQLException, IOException {
-		String studentQuery = "DELETE FROM students WHERE dni = ?";
 		String moduleStudentQuery = "DELETE FROM modules_students WHERE student_dni = ?";
+		String studentQuery = "DELETE FROM students WHERE dni = ?";
 
 		try {
 			if (connection == null) {
@@ -102,17 +102,15 @@ public class StudentDaoImpl extends BaseDaoImpl<Student, Object> implements cat.
 
 			connection.setAutoCommit(false);
 
-			PreparedStatement studentStmt = getPreparedStatement(studentQuery);
-			studentStmt.setString(1, dni);
-
-			executeUpdateQuery(studentStmt);
-
 			PreparedStatement moduleStmt = getPreparedStatement(moduleStudentQuery);
 			moduleStmt.setString(1, dni);
 
-			executeUpdateQuery(moduleStmt);
+			PreparedStatement studentStmt = getPreparedStatement(studentQuery);
+			studentStmt.setString(1, dni);
 
-		} catch (Exception e) {
+			connection.commit();
+
+		} catch (SQLException e) {
 			connection.rollback();
 
 		} finally {

@@ -58,20 +58,16 @@ public class StudentDaoImplTest {
 
 	@Test
 	public void testAddAndRemoveOk() throws ClassNotFoundException, SQLException, IOException {
-		// Test add student
 		final String DNI = "48164276E";
 		Student student = createArielStudent();
 
 		student = studentDao.add(student);
-
 		assertNotNull(student);
 		assertEquals(DNI, student.getDni());
 
-		// Test remove student
 		studentDao.remove(student);
 
 		student = studentDao.findByPk(DNI);
-
 		assertNull(student);
 	}
 
@@ -106,7 +102,7 @@ public class StudentDaoImplTest {
 		Student student = new Student();
 		student.setDni("48164276E");
 		student.setName("Ariel");
-		student.setSurname("Gómez Valiente");
+		student.setSurname("Gomez Valiente");
 		student.setEmail("thearielcompany@gmail.com");
 		student.setCycle("DAW");
 		student.setModules(modules);
